@@ -39,6 +39,8 @@ public class ProductoController extends HttpServlet {
             guardarProductoAction(request, response);
         } else if (request.getParameter("action").equals("editar")) {
             editarProductoAction(request, response);
+        } else if (request.getParameter("action").equals("eliminar")) {
+            eliminarProductoAction(request, response);
         }
     }
 
@@ -83,6 +85,14 @@ public class ProductoController extends HttpServlet {
         int id = Integer.parseInt(request.getParameter("id"));
         request.setAttribute("producto", productoBo.findById(id));
         request.getRequestDispatcher("producto/editar.jsp").forward(request, response);
+    }
+
+    private void eliminarProductoAction(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        int id = Integer.parseInt(request.getParameter("id"));
+        productoBo.delete(id);
+        request.setAttribute("message", "El producto fue eliminado exitosamente");
+        listarProductosAction(request, response);
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

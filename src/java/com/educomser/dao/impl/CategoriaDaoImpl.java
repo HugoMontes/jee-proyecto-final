@@ -9,12 +9,12 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import org.apache.log4j.Logger;
 
 public class CategoriaDaoImpl implements CategoriaDao{
 
     private Conexion conexion;
+    private final static Logger LOGGER = Logger.getLogger(CategoriaDaoImpl.class);
     
     @Override
     public List<Categoria> findAll() {
@@ -22,7 +22,7 @@ public class CategoriaDaoImpl implements CategoriaDao{
         try {
             conexion = new Conexion();
             String sql = "SELECT id, categoria, descripcion FROM categoria";
-            Logger.getLogger(ProductoDaoImpl.class.getName()).log(Level.INFO, sql);
+            LOGGER.info(sql);
             Statement st = conexion.getConnection().createStatement();
             ResultSet rs = st.executeQuery(sql);
             while (rs.next()) {
@@ -36,7 +36,7 @@ public class CategoriaDaoImpl implements CategoriaDao{
             rs.close();
         } catch (SQLException ex) {
             String msg = "Error al listar";
-            Logger.getLogger(ProductoDaoImpl.class.getName()).log(Level.SEVERE, msg, ex);
+            LOGGER.error(msg, ex);
         } finally {
             conexion.close();
         }
@@ -51,7 +51,7 @@ public class CategoriaDaoImpl implements CategoriaDao{
             String sql = "SELECT id, categoria, descripcion FROM categoria WHERE id=?";
             PreparedStatement st = conexion.getConnection().prepareStatement(sql);
             st.setInt(1, id);
-            Logger.getLogger(ProductoDaoImpl.class.getName()).log(Level.INFO, st.toString());
+            LOGGER.info(sql);
             ResultSet rs = st.executeQuery();
             if (rs.next()) {
                 cat = new Categoria();
@@ -63,7 +63,7 @@ public class CategoriaDaoImpl implements CategoriaDao{
             rs.close();
         } catch (SQLException ex) {
             String msg = "Error al buscar";
-            Logger.getLogger(ProductoDaoImpl.class.getName()).log(Level.SEVERE, msg, ex);
+            LOGGER.error(msg, ex);
         } finally {
             conexion.close();
         }

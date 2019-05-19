@@ -10,13 +10,13 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import org.apache.log4j.Logger;
 
 public class ProductoDaoImpl implements ProductoDao {
 
     private Conexion conexion;
-
+    private final static Logger LOGGER = Logger.getLogger(ProductoDaoImpl.class);
+    
     @Override
     public void save(Producto producto) {
         try {
@@ -30,12 +30,12 @@ public class ProductoDaoImpl implements ProductoDao {
             st.setInt(5, producto.getStockMinimo());
             st.setDate(6, new java.sql.Date(producto.getFechaVencimiento().getTime()));
             st.setInt(7, producto.getIdCategoria());
-            Logger.getLogger(ProductoDaoImpl.class.getName()).log(Level.INFO, st.toString());
+            LOGGER.info(st.toString());
             st.executeUpdate();
             st.close();
         } catch (SQLException ex) {
             String msg = "Error al guardar: ";
-            Logger.getLogger(ProductoDaoImpl.class.getName()).log(Level.SEVERE, msg, ex);
+            LOGGER.error(msg, ex);
         } finally {
             conexion.close();
         }
@@ -56,12 +56,12 @@ public class ProductoDaoImpl implements ProductoDao {
             st.setInt(7, producto.getIdCategoria());
             st.setTimestamp(8, new java.sql.Timestamp(new Date().getTime()));
             st.setInt(9, producto.getId());
-            Logger.getLogger(ProductoDaoImpl.class.getName()).log(Level.INFO, st.toString());
+            LOGGER.info(st.toString());
             st.executeUpdate();
             st.close();
         } catch (SQLException ex) {
             String msg = "Error al actualizar";
-            Logger.getLogger(ProductoDaoImpl.class.getName()).log(Level.SEVERE, msg, ex);
+            LOGGER.error(msg, ex);
         } finally {
             conexion.close();
         }
@@ -74,12 +74,12 @@ public class ProductoDaoImpl implements ProductoDao {
             String sql = "DELETE FROM producto WHERE id=?";
             PreparedStatement st = conexion.getConnection().prepareStatement(sql);
             st.setInt(1, id);
-            Logger.getLogger(ProductoDaoImpl.class.getName()).log(Level.INFO, st.toString());
+            LOGGER.info(st.toString());
             st.executeUpdate();
             st.close();
         } catch (SQLException ex) {
             String msg = "Error al eliminar";
-            Logger.getLogger(ProductoDaoImpl.class.getName()).log(Level.SEVERE, msg, ex);
+            LOGGER.error(msg, ex);
         } finally {
             conexion.close();
         }
@@ -91,7 +91,7 @@ public class ProductoDaoImpl implements ProductoDao {
         try {
             conexion = new Conexion();
             String sql = "SELECT id, nombre, unidad_medida, precio, stock_actual, stock_minimo, fecha_vencimiento FROM producto";
-            Logger.getLogger(ProductoDaoImpl.class.getName()).log(Level.INFO, sql);
+            LOGGER.info(sql);
             Statement st = conexion.getConnection().createStatement();
             ResultSet rs = st.executeQuery(sql);
             while (rs.next()) {
@@ -109,7 +109,7 @@ public class ProductoDaoImpl implements ProductoDao {
             rs.close();
         } catch (SQLException ex) {
             String msg = "Error al listar";
-            Logger.getLogger(ProductoDaoImpl.class.getName()).log(Level.SEVERE, msg, ex);
+            LOGGER.error(msg, ex);
         } finally {
             conexion.close();
         }
@@ -124,7 +124,7 @@ public class ProductoDaoImpl implements ProductoDao {
             String sql = "SELECT id, nombre, unidad_medida, precio, stock_actual, stock_minimo, fecha_vencimiento, id_categoria FROM producto WHERE id=?";
             PreparedStatement st = conexion.getConnection().prepareStatement(sql);
             st.setInt(1, id);
-            Logger.getLogger(ProductoDaoImpl.class.getName()).log(Level.INFO, st.toString());
+            LOGGER.info(st.toString());
             ResultSet rs = st.executeQuery();
             if (rs.next()) {
                 prod = new Producto();
@@ -141,7 +141,7 @@ public class ProductoDaoImpl implements ProductoDao {
             rs.close();
         } catch (SQLException ex) {
             String msg = "Error al listar";
-            Logger.getLogger(ProductoDaoImpl.class.getName()).log(Level.SEVERE, msg, ex);
+            LOGGER.error(msg, ex);
         } finally {
             conexion.close();
         }

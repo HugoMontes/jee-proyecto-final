@@ -30,7 +30,7 @@
                     <td>${prod.precio}</td>
                     <td>${prod.fechaVencimiento}</td>
                     <td>
-                        <a href="ProductoController?action=eliminar&id=${prod.id}">
+                        <a href="ProductoController?action=eliminar&id=${prod.id}" onclick="return confirm('Esta seguro de eliminar este item?');">
                             Eliminar
                         </a>
                         <a href="ProductoController?action=editar&id=${prod.id}">
